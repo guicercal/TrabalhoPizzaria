@@ -77,6 +77,16 @@ public class MainFrame extends javax.swing.JFrame {
         btnCancelarEditarCliente = new javax.swing.JButton();
         fieldNumeroClienteEditar = new javax.swing.JTextField();
         fieldTelefoneClienteEditar = new javax.swing.JTextField();
+        dialogNovoSabor = new javax.swing.JDialog();
+        fieldNomeSabor = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        btnGravarSabor = new javax.swing.JButton();
+        fieldTipoSabor = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        fieldIngredientesSabor = new javax.swing.JTextArea();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         abaPedidos = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -90,7 +100,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
-        jButton9 = new javax.swing.JButton();
+        btnNovoSabor = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaClientes = new javax.swing.JTable();
@@ -418,6 +428,97 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        fieldNomeSabor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldNomeSaborActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Sabor:");
+
+        btnGravarSabor.setText("Adicionar");
+        btnGravarSabor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGravarSaborMouseClicked(evt);
+            }
+        });
+        btnGravarSabor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGravarSaborActionPerformed(evt);
+            }
+        });
+
+        fieldTipoSabor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Simples", "Especial", "Premium" }));
+        fieldTipoSabor.setToolTipText("");
+        fieldTipoSabor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldTipoSaborActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Tipo:");
+
+        jButton7.setText("Cancelar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Ingredientes:");
+
+        fieldIngredientesSabor.setColumns(20);
+        fieldIngredientesSabor.setRows(5);
+        jScrollPane4.setViewportView(fieldIngredientesSabor);
+
+        javax.swing.GroupLayout dialogNovoSaborLayout = new javax.swing.GroupLayout(dialogNovoSabor.getContentPane());
+        dialogNovoSabor.getContentPane().setLayout(dialogNovoSaborLayout);
+        dialogNovoSaborLayout.setHorizontalGroup(
+            dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogNovoSaborLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogNovoSaborLayout.createSequentialGroup()
+                        .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnGravarSabor)
+                            .addComponent(fieldNomeSabor)
+                            .addComponent(fieldTipoSabor, 0, 116, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addComponent(jButton7)
+                        .addGap(65, 65, 65))
+                    .addGroup(dialogNovoSaborLayout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        dialogNovoSaborLayout.setVerticalGroup(
+            dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogNovoSaborLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldNomeSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(10, 10, 10)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(dialogNovoSaborLayout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel7)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(fieldTipoSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGravarSabor)
+                    .addComponent(jButton7))
+                .addGap(84, 84, 84))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pizzaria LPOO");
         setIconImages(null);
@@ -535,7 +636,17 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTable3);
 
-        jButton9.setText("Novo");
+        btnNovoSabor.setText("Novo Sabor");
+        btnNovoSabor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNovoSaborMouseClicked(evt);
+            }
+        });
+        btnNovoSabor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoSaborActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -546,18 +657,18 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(180, 180, 180)
+                .addComponent(btnNovoSabor, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton9)
-                .addContainerGap())
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnNovoSabor)
+                .addGap(18, 18, 18))
         );
 
         abaPedidos.addTab("Sabores", jPanel5);
@@ -766,7 +877,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoClienteActionPerformed
-        // TODO add your handling code here:
       
     }//GEN-LAST:event_btnNovoClienteActionPerformed
 
@@ -1080,6 +1190,96 @@ public class MainFrame extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnGravarValoresActionPerformed
+
+    private void btnNovoSaborActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoSaborActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnNovoSaborActionPerformed
+
+    private void btnNovoSaborMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNovoSaborMouseClicked
+        // TODO add your handling code here:
+        dialogNovoSabor.setVisible(true);
+        dialogNovoSabor.toFront();
+    }//GEN-LAST:event_btnNovoSaborMouseClicked
+
+    private void fieldNomeSaborActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNomeSaborActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldNomeSaborActionPerformed
+
+    private void btnGravarSaborActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarSaborActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGravarSaborActionPerformed
+
+    private void fieldTipoSaborActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldTipoSaborActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_fieldTipoSaborActionPerformed
+
+    private void btnGravarSaborMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGravarSaborMouseClicked
+        // TODO add your handling code here:
+        boolean formOk = true;
+        String mensagem;
+        mensagem = "Os seguintes campos estão inválidos: \n";
+        
+        //validar formulário
+        if(fieldNomeSabor.getText().isEmpty()){
+            mensagem += "Nome \n";
+            formOk = false;
+        }
+        
+        
+        if(!formOk){
+            JOptionPane.showMessageDialog(dialogNovoSabor, mensagem, "Problemas encontrados",ERROR_MESSAGE);
+        }
+        else{
+            //instancia um novo objeto do tipo cliente
+            SaborPizza saborpizza = new SaborPizza();
+
+            //carrega os dados do formulário para dentro do objeto cliente
+            saborpizza.setNome(fieldNomeSabor.getText());
+            saborpizza.setIngredientes(fieldIngredientesSabor.getText());
+            if (fieldTipoSabor.getSelectedItem().toString()=="Simples"){
+                saborpizza.setTipo(1);    
+            } else if (fieldTipoSabor.getSelectedItem().toString()=="Especial"){
+                saborpizza.setTipo(2);
+            } else {
+                saborpizza.setTipo(3);
+            }
+            
+            
+            //instancia um objeto da classe ClienteDAO
+
+            try{
+                SaborPizzaDAO dao = new SaborPizzaDAO();
+                //tenta gravar os dados no banco de dados
+                dao.insert(saborpizza);
+            }
+            catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(dialogNovoSabor,"Erro ao gravar no banco de dados. E="+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            fieldNomeSabor.setText("");
+            fieldIngredientesSabor.setText("");
+            
+            //emite alerta de acordo com o resultado da operação
+            JOptionPane.showMessageDialog(dialogNovoCliente, "Sabor cadastrado com sucesso!", "",INFORMATION_MESSAGE);
+            dialogNovoCliente.dispose();
+
+        }
+        
+        
+
+       
+    }//GEN-LAST:event_btnGravarSaborMouseClicked
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        dialogNovoSabor.dispose();
+    }//GEN-LAST:event_jButton7ActionPerformed
     
     public Boolean valorValido(String valor){
         try{
@@ -1141,35 +1341,44 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluirCliente;
     private javax.swing.JButton btnGravarEditarCliente;
     private javax.swing.JButton btnGravarNovoCliente;
+    private javax.swing.JButton btnGravarSabor;
     private javax.swing.JButton btnGravarValores;
     private javax.swing.JButton btnNovoCliente;
+    private javax.swing.JButton btnNovoSabor;
     private javax.swing.JButton btnSearchCliente;
     private javax.swing.JDialog dialogEditarCliente;
     private javax.swing.JDialog dialogNovoCliente;
+    private javax.swing.JDialog dialogNovoSabor;
     private javax.swing.JTextField fieldBairroCliente;
     private javax.swing.JTextField fieldBairroClienteEditar;
     private javax.swing.JTextField fieldCidadeCliente;
     private javax.swing.JTextField fieldCidadeClienteEditar;
     private javax.swing.JTextField fieldComplementoCliente;
     private javax.swing.JTextField fieldComplementoClienteEditar;
+    private javax.swing.JTextArea fieldIngredientesSabor;
     private javax.swing.JTextField fieldNomeCliente;
     private javax.swing.JTextField fieldNomeClienteEditar;
+    private javax.swing.JTextField fieldNomeSabor;
     private javax.swing.JTextField fieldNumeroCliente;
     private javax.swing.JTextField fieldNumeroClienteEditar;
     private javax.swing.JTextField fieldRuaCliente;
     private javax.swing.JTextField fieldRuaClienteEditar;
     private javax.swing.JTextField fieldTelefoneCliente;
     private javax.swing.JTextField fieldTelefoneClienteEditar;
+    private javax.swing.JComboBox fieldTipoSabor;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
@@ -1179,6 +1388,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
     private javax.swing.JLabel labelBairroCliente;
