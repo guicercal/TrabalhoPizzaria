@@ -7,6 +7,8 @@ package trabalhopizzaria;
 
 import java.awt.Component;
 import java.io.IOException;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +89,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         fieldIngredientesSabor = new javax.swing.JTextArea();
+        dialogValores = new javax.swing.JDialog();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         abaPedidos = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -517,6 +520,17 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(btnGravarSabor)
                     .addComponent(jButton7))
                 .addGap(84, 84, 84))
+        );
+
+        javax.swing.GroupLayout dialogValoresLayout = new javax.swing.GroupLayout(dialogValores.getContentPane());
+        dialogValores.getContentPane().setLayout(dialogValoresLayout);
+        dialogValoresLayout.setHorizontalGroup(
+            dialogValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        dialogValoresLayout.setVerticalGroup(
+            dialogValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1187,8 +1201,68 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, mensagem, "Problemas encontrados",ERROR_MESSAGE);
         }
         else{
+            //instancia um novo objeto do tipo tipo de pizza
+            TipoPizza tipopizza = new TipoPizza();
+
+            //carrega os dados do formulário para dentro do objeto cliente
             
+            if(!valorPizzaSimples.getText().isEmpty()){
+                tipopizza.setValorCm(Double.parseDouble(valorPizzaSimples.getText()));
+                tipopizza.setId(1);
+                 try{
+                TipoPizzaDAO dao = new TipoPizzaDAO();
+                //tenta gravar os dados no banco de dados
+                dao.update(tipopizza);
+                }
+                catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(this,"Erro ao gravar no banco de dados. E="+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException | IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                //emite alerta de acordo com o resultado da operação
+                JOptionPane.showMessageDialog(this, "Valor(es) atualizado(s) com sucesso!", "",INFORMATION_MESSAGE);
+                //dialogNovoCliente.dispose();
+                }
+            if(!valorPizzaEspecial.getText().isEmpty()){
+                tipopizza.setValorCm(Double.parseDouble(valorPizzaEspecial.getText()));
+                tipopizza.setId(2);
+                 try{
+                TipoPizzaDAO dao = new TipoPizzaDAO();
+                //tenta gravar os dados no banco de dados
+                dao.update(tipopizza);
+                }
+                catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(this,"Erro ao gravar no banco de dados. E="+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException | IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                //emite alerta de acordo com o resultado da operação
+                JOptionPane.showMessageDialog(this, "Valor(es) atualizado(s) com sucesso!", "",INFORMATION_MESSAGE);
+                //dialogNovoCliente.dispose();
+                }
+            if(!valorPizzaPremium.getText().isEmpty()){
+                tipopizza.setValorCm(Double.parseDouble(valorPizzaPremium.getText()));
+                tipopizza.setId(3);
+                 try{
+                TipoPizzaDAO dao = new TipoPizzaDAO();
+                //tenta gravar os dados no banco de dados
+                dao.update(tipopizza);
+                }
+                catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(this,"Erro ao gravar no banco de dados. E="+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException | IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                //emite alerta de acordo com o resultado da operação
+                JOptionPane.showMessageDialog(this, "Valor(es) atualizado(s) com sucesso!", "",INFORMATION_MESSAGE);
+                //dialogNovoCliente.dispose();
+                }
+ 
         }
+        
     }//GEN-LAST:event_btnGravarValoresActionPerformed
 
     private void btnNovoSaborActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoSaborActionPerformed
@@ -1349,6 +1423,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JDialog dialogEditarCliente;
     private javax.swing.JDialog dialogNovoCliente;
     private javax.swing.JDialog dialogNovoSabor;
+    private javax.swing.JDialog dialogValores;
     private javax.swing.JTextField fieldBairroCliente;
     private javax.swing.JTextField fieldBairroClienteEditar;
     private javax.swing.JTextField fieldCidadeCliente;
