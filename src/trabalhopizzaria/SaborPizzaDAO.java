@@ -4,8 +4,10 @@ package trabalhopizzaria;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SaborPizzaDAO {
@@ -16,11 +18,7 @@ public class SaborPizzaDAO {
 
     private ConnectionFactory con;
 
-    private String updateStm;
-
-    private String deleteStm;
-
-    private String findAllSaboresStm;
+    private String findAllSaboresStm = "SELECT * FROM sabor_pizza";
 
      public SaborPizzaDAO() {
         this.conFactory = new ConnectionFactory();
@@ -51,7 +49,39 @@ public class SaborPizzaDAO {
         }
 }
 
-    public List<SaborPizza> findAllSabores() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<SaborPizza> findAllSabores() throws IOException {
+        PreparedStatement stm = null;
+        Connection con = null;
+        
+        ResultSet rs = null;
+        try{
+           con = conFactory.getConnection();
+           stm = con.prepareStatement(findAllSaboresStm);
+           rs = stm.executeQuery();
+           
+           List<SaborPizza> lista = new ArrayList();
+           
+           while(rs.next()){
+               SaborPizza cli = new SaborPizza();
+               cli.setId(rs.getInt("id_sabor_pizza"));
+               cli.setNome(rs.getString("nome"));
+               cli.setIngredientes(rs.getString("ingredientes"));
+               cli.setTipo(rs.getInt("id_tipo"));
+               lista.add(cli);
+           }
+           
+           return lista;
+           
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally{
+            try{stm.close();}catch(Exception ex){
+               throw new RuntimeException(ex);
+            }
+            try{con.close();}catch(Exception ex){
+                throw new RuntimeException(ex);
+            }
+        }
     }
 }
