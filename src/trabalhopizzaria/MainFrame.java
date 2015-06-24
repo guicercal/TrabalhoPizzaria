@@ -5,14 +5,11 @@
  */
 package trabalhopizzaria;
 
-import java.awt.Component;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
@@ -24,12 +21,14 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 public class MainFrame extends javax.swing.JFrame {
     
     ClienteTableModel modeloTabelaCliente;
+    SaboresTableModel modeloTabelaSabores;
     /**
      * Creates new form testJframe
      * @throws java.io.IOException
      */
     public MainFrame() throws IOException {
         modeloTabelaCliente = new ClienteTableModel();
+        modeloTabelaSabores = new SaboresTableModel();
 
         initComponents();
     }
@@ -428,6 +427,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        dialogNovoSabor.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dialogNovoSabor.setTitle("Cadastrar Novo Sabor");
+        dialogNovoSabor.setMinimumSize(new java.awt.Dimension(410, 319));
+        dialogNovoSabor.setModal(true);
+        dialogNovoSabor.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        dialogNovoSabor.setPreferredSize(new java.awt.Dimension(410, 319));
+        dialogNovoSabor.setResizable(false);
+
         fieldNomeSabor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldNomeSaborActionPerformed(evt);
@@ -482,18 +489,15 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                        .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnGravarSabor)
-                            .addComponent(fieldNomeSabor)
-                            .addComponent(fieldTipoSabor, 0, 116, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                        .addComponent(jButton7)
-                        .addGap(65, 65, 65))
-                    .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(btnGravarSabor, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4)
+                    .addComponent(fieldNomeSabor)
+                    .addComponent(fieldTipoSabor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE))
         );
         dialogNovoSaborLayout.setVerticalGroup(
             dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,7 +512,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(dialogNovoSaborLayout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(jLabel7)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(fieldTipoSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -516,7 +520,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGravarSabor)
                     .addComponent(jButton7))
-                .addGap(84, 84, 84))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -611,29 +615,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         abaPedidos.addTab("Pedidos", jPanel1);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Nome", "Tipo"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jTable3.setModel(modeloTabelaSabores);
         jScrollPane3.setViewportView(jTable3);
 
         btnNovoSabor.setText("Novo Sabor");
@@ -1228,6 +1210,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         
+        
         if(!formOk){
             JOptionPane.showMessageDialog(dialogNovoSabor, mensagem, "Problemas encontrados",ERROR_MESSAGE);
         }
@@ -1238,12 +1221,16 @@ public class MainFrame extends javax.swing.JFrame {
             //carrega os dados do formulário para dentro do objeto cliente
             saborpizza.setNome(fieldNomeSabor.getText());
             saborpizza.setIngredientes(fieldIngredientesSabor.getText());
-            if (fieldTipoSabor.getSelectedItem().toString()=="Simples"){
-                saborpizza.setTipo(1);    
-            } else if (fieldTipoSabor.getSelectedItem().toString()=="Especial"){
-                saborpizza.setTipo(2);
-            } else {
-                saborpizza.setTipo(3);
+            if (null != fieldTipoSabor.getSelectedItem().toString())switch (fieldTipoSabor.getSelectedItem().toString()) {
+                case "Simples":
+                    saborpizza.setTipo(1);
+                    break;
+                case "Especial":
+                    saborpizza.setTipo(2);
+                    break;
+                default:
+                    saborpizza.setTipo(3);
+                    break;
             }
             
             
@@ -1253,6 +1240,7 @@ public class MainFrame extends javax.swing.JFrame {
                 SaborPizzaDAO dao = new SaborPizzaDAO();
                 //tenta gravar os dados no banco de dados
                 dao.insert(saborpizza);
+                modeloTabelaSabores.adicionaSabor(saborpizza);
             }
             catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(dialogNovoSabor,"Erro ao gravar no banco de dados. E="+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1266,14 +1254,9 @@ public class MainFrame extends javax.swing.JFrame {
             fieldIngredientesSabor.setText("");
             
             //emite alerta de acordo com o resultado da operação
-            JOptionPane.showMessageDialog(dialogNovoCliente, "Sabor cadastrado com sucesso!", "",INFORMATION_MESSAGE);
-            dialogNovoCliente.dispose();
-
+            JOptionPane.showMessageDialog(dialogNovoSabor, "Sabor cadastrado com sucesso!", "",INFORMATION_MESSAGE);
+            dialogNovoSabor.dispose();
         }
-        
-        
-
-       
     }//GEN-LAST:event_btnGravarSaborMouseClicked
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
