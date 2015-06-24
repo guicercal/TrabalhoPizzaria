@@ -32,8 +32,20 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() throws IOException {
         modeloTabelaCliente = new ClienteTableModel();
+        
 
         initComponents();
+        try {
+            // TODO add your handling code here:
+            TipoPizzaDAO dao = new TipoPizzaDAO();
+            valorPizzaSimples.setText(String.valueOf(dao.findValorByTipo(1)));
+            valorPizzaEspecial.setText(String.valueOf(dao.findValorByTipo(2)));
+            valorPizzaPremium.setText(String.valueOf(dao.findValorByTipo(3)));
+            
+            
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -538,6 +550,11 @@ public class MainFrame extends javax.swing.JFrame {
         setIconImages(null);
 
         abaPedidos.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        abaPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                abaPedidosMouseClicked(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1219,9 +1236,6 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (SQLException | IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-                //emite alerta de acordo com o resultado da operação
-                JOptionPane.showMessageDialog(this, "Valor(es) atualizado(s) com sucesso!", "",INFORMATION_MESSAGE);
                 //dialogNovoCliente.dispose();
                 }
             if(!valorPizzaEspecial.getText().isEmpty()){
@@ -1237,9 +1251,6 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (SQLException | IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-                //emite alerta de acordo com o resultado da operação
-                JOptionPane.showMessageDialog(this, "Valor(es) atualizado(s) com sucesso!", "",INFORMATION_MESSAGE);
                 //dialogNovoCliente.dispose();
                 }
             if(!valorPizzaPremium.getText().isEmpty()){
@@ -1354,11 +1365,25 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         dialogNovoSabor.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void abaPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_abaPedidosMouseClicked
+        try {
+            // TODO add your handling code here:
+            TipoPizzaDAO dao = new TipoPizzaDAO();
+            valorPizzaSimples.setText(String.valueOf(dao.findValorByTipo(1)));
+            valorPizzaEspecial.setText(String.valueOf(dao.findValorByTipo(2)));
+            valorPizzaPremium.setText(String.valueOf(dao.findValorByTipo(3)));
+            
+            
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_abaPedidosMouseClicked
     
     public Boolean valorValido(String valor){
         try{
            Double d = Double.parseDouble(valor.replace(",", "."));
-           return true;
+           return true && d>0;
           
         }
         catch(NumberFormatException e){
