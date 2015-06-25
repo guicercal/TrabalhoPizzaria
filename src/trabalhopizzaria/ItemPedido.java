@@ -11,13 +11,33 @@ public class ItemPedido {
 
     private FormaPizza forma;
 
-    private List<SaborPizza> sabores;
-
     private Double valor;
 
     private Double area;
 
     private Double medida;
+    
+    private SaborPizza sabor1;
+    
+    public SaborPizza getSabor1() {
+		return sabor1;
+	}
+
+	public void setSabor1(SaborPizza sabor1) {
+		this.sabor1 = sabor1;
+	}
+
+	public SaborPizza getSabor2() {
+		return sabor2;
+	}
+
+	public void setSabor2(SaborPizza sabor2) {
+		this.sabor2 = sabor2;
+	}
+
+
+
+	private SaborPizza sabor2;
 
     public int getId() {
         return id;
@@ -43,14 +63,7 @@ public class ItemPedido {
         this.forma = forma;
     }
 
-    public List<SaborPizza> getSabores() {
-        return sabores;
-    }
-
-    public void setSabores(List<SaborPizza> sabores) {
-        this.sabores = sabores;
-    }
-
+    
     public Double getValor() {
         return valor;
     }

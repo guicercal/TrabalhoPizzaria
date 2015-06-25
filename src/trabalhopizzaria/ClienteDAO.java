@@ -117,13 +117,58 @@ public class ClienteDAO {
         }
     }
 
-    public int findClienteById(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public Cliente findClienteById(int id) throws IOException {
+    	//Objeto de retorno do método
+		Cliente CliRetorno = null;
+        Connection con = null;
+        PreparedStatement preparador = null;
+        
+		String sql = "select * from cliente where id_cliente=?";
+		
+		try {
+			
+			con = conFactory.getConnection();
+			preparador = con.prepareStatement(sql);
+			
+			preparador.setInt(1,id);
+			//Retorno da consulta em Resultset
+			ResultSet resultado = preparador.executeQuery();
+			//Se tem registro
+			CliRetorno = new Cliente();
+			if(resultado.next()){
+				resultado.beforeFirst();
+				//instancia o objeto Usuario
+				
+				CliRetorno.setId(resultado.getInt("id_cliente"));
+				CliRetorno.setNome(resultado.getString("nome"));
+				CliRetorno.setTelefone(resultado.getString("telefone"));
+				CliRetorno.setRua(resultado.getString("rua"));
+				CliRetorno.setNumero(resultado.getInt("numero"));
+				CliRetorno.setCidade(resultado.getString("cidade"));
+				CliRetorno.setBairro(resultado.getString("bairro"));
+				CliRetorno.setComplemento(resultado.getString("complemento"));
+				
+			}
+			
+			return CliRetorno;
+			
+		} 
+		catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally{
+            try{preparador.close();}catch(Exception ex){
+               throw new RuntimeException(ex);
+            }
+            try{con.close();}catch(Exception ex){
+                throw new RuntimeException(ex);
+            }
+        }
+		
+		
+	}
+    
 
-    public String findClienteByTelefone(String telefone) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+   
 
     public List<Cliente> findAllClientes() throws IOException {
         PreparedStatement stm = null;

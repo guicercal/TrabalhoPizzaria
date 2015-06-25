@@ -71,5 +71,5 @@ public abstract class FormaPizza {
     public String getNome() {
         return nome;
     }
-    
+    public abstract int getFormaId();
 }

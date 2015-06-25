@@ -13,5 +13,8 @@ public class PizzaRedonda extends FormaPizza {
     public Double calcularMedida(Double area) {
         return Math.sqrt(area/Math.PI);
     }
-    
+    @Override
+    public int getFormaId(){
+    	return 2;
+    }
 }
