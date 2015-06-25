@@ -34,6 +34,8 @@ public class ItemPedido {
     private Double area;
 
     private Double medida;
+    
+   
 
     public int getId() {
         return id;

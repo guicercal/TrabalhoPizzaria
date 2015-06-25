@@ -13,5 +13,8 @@ public class PizzaTriangular extends FormaPizza {
     public Double calcularMedida(Double area) {
         return Math.sqrt((4*area)/Math.sqrt(3));
     }    
-    
+    @Override
+    public int getFormaId(){
+    	return 3;
+    }
 }
