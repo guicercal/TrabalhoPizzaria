@@ -11,10 +11,26 @@ public class ItemPedido {
 
     private FormaPizza forma;
 
-    private List<SaborPizza> sabores;
-
     private Double valor;
 
+    private SaborPizza sabor1,sabor2;
+
+    public SaborPizza getSabor1() {
+        return sabor1;
+    }
+
+    public void setSabor1(SaborPizza sabor1) {
+        this.sabor1 = sabor1;
+    }
+
+    public SaborPizza getSabor2() {
+        return sabor2;
+    }
+
+    public void setSabor2(SaborPizza sabor2) {
+        this.sabor2 = sabor2;
+    }
+    
     private Double area;
 
     private Double medida;
@@ -41,14 +57,6 @@ public class ItemPedido {
 
     public void setForma(FormaPizza forma) {
         this.forma = forma;
-    }
-
-    public List<SaborPizza> getSabores() {
-        return sabores;
-    }
-
-    public void setSabores(List<SaborPizza> sabores) {
-        this.sabores = sabores;
     }
 
     public Double getValor() {
