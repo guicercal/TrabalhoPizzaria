@@ -7,6 +7,8 @@ public class SaborPizza {
     private String nome;
 
     private String ingredientes;
+    
+    private int tipo;
 
     public int getId() {
         return id;
@@ -39,6 +41,18 @@ public class SaborPizza {
     public void setTipo(int tipo) {
         this.tipo = tipo;
     }
+    
+    public String getNomeTipo(){
+    
+        switch(this.tipo){
+            case 1: return "Simples"; 
+            case 2: return "Especial";
+            case 3: return "Premium";
+            default: return "Simples";
+        }
+    }
 
-    private int tipo;
+    
+
+   
 }
