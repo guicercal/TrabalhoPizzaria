@@ -17,4 +17,19 @@ public class PizzaTriangular extends FormaPizza {
     public int getFormaId(){
     	return 3;
     }
+    
+    @Override
+    public void setMedida(Double medida){
+        
+        if(medida >= 20.00 && medida <= 60.00){
+            this.medida = medida;
+        }else if(medida < 20.00){
+            this.medida  = 20.00;
+        }
+        else{
+            this.medida = 60.00;
+        }
+        
+        this.area = calcularArea(medida);
+    }
 }

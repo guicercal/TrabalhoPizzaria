@@ -1,6 +1,7 @@
 package trabalhopizzaria;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Pedido {
 
     private int status;
 
-    private Date dataPedido;
+    private Timestamp dataPedido;
 
     private List<ItemPedido> itens;
 
@@ -42,11 +43,11 @@ public class Pedido {
         this.status = status;
     }
 
-    public Date getDataPedido() {
+    public Timestamp getDataPedido() {
         return dataPedido;
     }
 
-    public void setDataPedido(Date dataPedido) {
+    public void setDataPedido(Timestamp dataPedido) {
         this.dataPedido = dataPedido;
     }
 
@@ -66,9 +67,11 @@ public class Pedido {
         this.valor = valor;
     }
     
-    
-    
-    public Double calcularValor() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String getNomeStatus(){
+        switch(status){
+            case 1: return "Aberto";
+            case 2: return "A caminho";
+            default: return "Entregue";
+        }
     }
 }

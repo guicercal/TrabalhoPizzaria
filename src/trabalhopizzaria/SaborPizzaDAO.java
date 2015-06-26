@@ -47,8 +47,41 @@ public class SaborPizzaDAO {
                 throw new RuntimeException(ex);
             }
         }
-}
-
+    }
+    
+    public SaborPizza getSaborById(int id) throws IOException{
+        Connection con = null;
+        PreparedStatement stm = null;
+        String sql = "SELECT * FROM sabor_pizza where id_sabor_pizza=?";
+        
+        try{
+            
+            con = conFactory.getConnection();
+            stm = con.prepareStatement(sql);
+            stm.setInt(1,id);
+            ResultSet rs = stm.executeQuery();
+            SaborPizza sabor = new SaborPizza();
+            
+            if(rs.next()){
+                sabor.setNome(rs.getString("nome"));
+                sabor.setId(rs.getInt("id_sabor_pizza"));
+                sabor.setIngredientes(rs.getString("ingredientes"));
+                sabor.setTipo(rs.getInt("id_tipo"));
+            }
+                     
+            return sabor;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally{
+            try{stm.close();}catch(Exception ex){
+               throw new RuntimeException(ex);
+            }
+            try{con.close();}catch(Exception ex){
+                throw new RuntimeException(ex);
+            }
+        }
+    }
     
     
     public List<SaborPizza> findAllSabores() throws IOException {

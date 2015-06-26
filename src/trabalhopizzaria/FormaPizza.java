@@ -6,9 +6,9 @@ package trabalhopizzaria;
  */
 public abstract class FormaPizza {
 
-    private Double area;
+    protected Double area;
 
-    private Double medida;
+    protected Double medida;
     
     private String nome;
 
@@ -43,8 +43,18 @@ public abstract class FormaPizza {
      * @param area - Area em cm² da forma. 
      */
     public void setArea(Double area) {
-        this.area = area;
-        this.medida = calcularMedida(area);
+        
+        if(area >= 100.00 && area <= 1670.00){
+            this.area = area;
+        }
+        else if(area < 100.00){
+            this.area = 100.00;
+        }
+        else{
+            this.area = 1670.00;
+        }
+            
+        this.medida = calcularMedida(this.area);
     }
 
     /**
@@ -63,10 +73,7 @@ public abstract class FormaPizza {
      * é calculada e parametrizada automaticamente.
      * @param medida - Medida do lado ou raio da forma.
      */
-    public void setMedida(Double medida) {
-        this.medida = medida;
-        this.area = calcularArea(medida);
-    }
+    public abstract void setMedida(Double medida);
     
     public String getNome() {
         return nome;

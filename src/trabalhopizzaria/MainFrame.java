@@ -6,9 +6,10 @@
 package trabalhopizzaria;
 
 import java.io.IOException;
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
+import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,17 +25,23 @@ public class MainFrame extends javax.swing.JFrame {
     
     ClienteTableModel modeloTabelaCliente;
     SaboresTableModel modeloTabelaSabores;
+    PedidosTableModel modeloTabelaPedidos;
+    ItensNovoPedidoTableModel modeloTabelaItensPedido;
+    
     /**
      * Creates new form testJframe
      * @throws java.io.IOException
      */
     public MainFrame() throws IOException {
         modeloTabelaCliente = new ClienteTableModel();
-
         modeloTabelaSabores = new SaboresTableModel();
-
+        modeloTabelaPedidos = new PedidosTableModel();
+        modeloTabelaItensPedido = new ItensNovoPedidoTableModel();
+        
 
         initComponents();
+       
+        
         try {
             // TODO add your handling code here:
             TipoPizzaDAO dao = new TipoPizzaDAO();
@@ -102,42 +109,39 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         fieldIngredientesSabor = new javax.swing.JTextArea();
-        dialogValores = new javax.swing.JDialog();
         dialogNovoPedido = new javax.swing.JDialog();
-        jLabel14 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jLabel15 = new javax.swing.JLabel();
-        btnExcluirItem = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        labelNomeClientePedido = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tableItensNovoPedido = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
+        btnGravarNovoPedido = new javax.swing.JButton();
+        btnExcluirItemNovoPedido = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        comboSabor1 = new javax.swing.JComboBox();
         jLabel11 = new javax.swing.JLabel();
+        comboSabor1 = new javax.swing.JComboBox();
         comboSabor2 = new javax.swing.JComboBox();
-        comboForma = new javax.swing.JComboBox();
+        comboFormaPizza = new javax.swing.JComboBox();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        fieldMedida = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        fieldArea = new javax.swing.JTextField();
         btnGravarItemPedido = new javax.swing.JButton();
-        btnGravarPedido = new javax.swing.JButton();
-        labelNomeClientePedido = new javax.swing.JLabel();
-        labelTelefoneClientePedido = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        labelValorTotal = new javax.swing.JLabel();
-        labelIdClientePedido = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        labelValorTotalNovoPedido = new javax.swing.JLabel();
+        btnCancelarNovoPedido = new javax.swing.JButton();
+        comboDimensaoNovoPedido = new javax.swing.JComboBox();
+        jLabel14 = new javax.swing.JLabel();
+        fieldTamanhoDimensaoItemPedido = new javax.swing.JTextField();
+        comboStatusNovoPedido = new javax.swing.JComboBox();
+        jLabel16 = new javax.swing.JLabel();
+        jDialog1 = new javax.swing.JDialog();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         abaPedidos = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        tabelaPedidos = new javax.swing.JTable();
+        btnEditarPedido = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
@@ -146,12 +150,12 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaClientes = new javax.swing.JTable();
         btnNovoCliente = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnEditarCliente = new javax.swing.JButton();
         btnExcluirCliente = new javax.swing.JButton();
         searchClienteField = new javax.swing.JTextField();
         btnSearchCliente = new javax.swing.JButton();
         btnClearFilterCliente = new javax.swing.JButton();
-        btnNovoPedido = new javax.swing.JButton();
+        btnEfetuarPedido = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -470,6 +474,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        dialogNovoSabor.setTitle("Novo Sabor");
+        dialogNovoSabor.setMinimumSize(new java.awt.Dimension(400, 340));
+        dialogNovoSabor.setModal(true);
+        dialogNovoSabor.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        dialogNovoSabor.setResizable(false);
+
         fieldNomeSabor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldNomeSaborActionPerformed(evt);
@@ -518,245 +528,267 @@ public class MainFrame extends javax.swing.JFrame {
         dialogNovoSaborLayout.setHorizontalGroup(
             dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
                 .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldNomeSabor)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                        .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnGravarSabor)
-                            .addComponent(fieldNomeSabor)
-                            .addComponent(fieldTipoSabor, 0, 116, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                        .addComponent(jButton7)
-                        .addGap(65, 65, 65))
+                        .addGap(0, 211, Short.MAX_VALUE)
+                        .addComponent(btnGravarSabor)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7))
                     .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(fieldTipoSabor, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         dialogNovoSaborLayout.setVerticalGroup(
             dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fieldNomeSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(10, 10, 10)
-                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(dialogNovoSaborLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel7)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(fieldTipoSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(4, 4, 4)
+                .addComponent(fieldNomeSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fieldTipoSabor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(dialogNovoSaborLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGravarSabor)
                     .addComponent(jButton7))
-                .addGap(84, 84, 84))
+                .addContainerGap())
         );
 
-        javax.swing.GroupLayout dialogValoresLayout = new javax.swing.GroupLayout(dialogValores.getContentPane());
-        dialogValores.getContentPane().setLayout(dialogValoresLayout);
-        dialogValoresLayout.setHorizontalGroup(
-            dialogValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        dialogValoresLayout.setVerticalGroup(
-            dialogValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        dialogNovoPedido.setMinimumSize(new java.awt.Dimension(814, 326));
+        dialogNovoPedido.setTitle("Efetuar Novo Pedido");
+        dialogNovoPedido.setMinimumSize(new java.awt.Dimension(730, 450));
         dialogNovoPedido.setModal(true);
         dialogNovoPedido.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        dialogNovoPedido.setPreferredSize(new java.awt.Dimension(590, 400));
 
-        jLabel14.setText("Status:");
+        jLabel8.setText("Cliente:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Aberto", "A Caminho", "Entregue" }));
+        tableItensNovoPedido.setModel(modeloTabelaItensPedido);
+        tableItensNovoPedido.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane5.setViewportView(tableItensNovoPedido);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Sabor 1", "Sabor 2", "Valor"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
+        jLabel9.setText("Itens deste Pedido");
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        btnGravarNovoPedido.setText("Gravar Pedido");
+        btnGravarNovoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGravarNovoPedidoActionPerformed(evt);
             }
         });
-        jScrollPane5.setViewportView(jTable2);
 
-        jLabel15.setText("Itens:");
-
-        btnExcluirItem.setText("Excluir Item");
-
-        jLabel8.setText("Preço Total:");
-
-        jLabel9.setText("Adicionar item:");
-
-        jLabel10.setText("Sabor 1:");
-
-        jLabel11.setText("Sabor 2:");
-
-        comboForma.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Quadrada", "Circular", "Triangular" }));
-
-        jLabel12.setText("Forma:");
-
-        jLabel13.setText("Medida:");
-
-        jLabel16.setText("Área:");
-
-        btnGravarItemPedido.setText("Gravar Item");
-        btnGravarItemPedido.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnGravarItemPedidoMouseClicked(evt);
+        btnExcluirItemNovoPedido.setText("Excluir Item");
+        btnExcluirItemNovoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirItemNovoPedidoActionPerformed(evt);
             }
         });
+
+        jLabel10.setText("Adicionar ítem ao Pedido");
+
+        jLabel11.setText("Sabor(es):");
+
+        comboSabor1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSabor1ActionPerformed(evt);
+            }
+        });
+
+        comboSabor2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSabor2ActionPerformed(evt);
+            }
+        });
+
+        comboFormaPizza.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Quadrada", "Redonda", "Triangular" }));
+        comboFormaPizza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFormaPizzaActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("Forma da Pizza:");
+
+        jLabel13.setText("Tipo de dimensão:");
+
+        btnGravarItemPedido.setText("Adicionar");
         btnGravarItemPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGravarItemPedidoActionPerformed(evt);
             }
         });
 
-        btnGravarPedido.setText("Gravar");
+        jLabel15.setText("VALOR TOTAL:  R$");
 
-        jLabel17.setText("-");
+        labelValorTotalNovoPedido.setText("0,00");
 
-        labelValorTotal.setText("jLabel18");
+        btnCancelarNovoPedido.setText("Cancelar");
+        btnCancelarNovoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarNovoPedidoActionPerformed(evt);
+            }
+        });
+
+        comboDimensaoNovoPedido.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Área", "Lado/Raio" }));
+        comboDimensaoNovoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboDimensaoNovoPedidoActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setText("Tamanho da dimensão:");
+
+        fieldTamanhoDimensaoItemPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldTamanhoDimensaoItemPedidoActionPerformed(evt);
+            }
+        });
+
+        comboStatusNovoPedido.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Aberto", "A caminho", "Entregue" }));
+
+        jLabel16.setText("Status");
 
         javax.swing.GroupLayout dialogNovoPedidoLayout = new javax.swing.GroupLayout(dialogNovoPedido.getContentPane());
         dialogNovoPedido.getContentPane().setLayout(dialogNovoPedidoLayout);
         dialogNovoPedidoLayout.setHorizontalGroup(
             dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                        .addGap(65, 65, 65)
                         .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                                .addComponent(btnExcluirItem)
-                                .addGap(86, 86, 86)
                                 .addComponent(jLabel8)
-                                .addGap(26, 26, 26)
-                                .addComponent(labelValorTotal))
-                            .addComponent(jLabel15)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addComponent(btnGravarPedido))
-                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(labelIdClientePedido)
-                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, dialogNovoPedidoLayout.createSequentialGroup()
-                                    .addGap(41, 41, 41)
-                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(5, 5, 5)
-                                    .addComponent(labelTelefoneClientePedido))
-                                .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                                    .addComponent(jLabel14)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(labelNomeClientePedido)
-                                .addGap(283, 283, 283)))))
-                .addGap(92, 92, 92)
-                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel9)
-                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelNomeClientePedido))
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(99, 99, 99)
                         .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(comboSabor1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(57, 57, 57))
                     .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel16))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGravarItemPedido)
-                            .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(comboForma, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(comboSabor2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(fieldMedida)
-                                .addComponent(fieldArea)))))
-                .addContainerGap(193, Short.MAX_VALUE))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnExcluirItemNovoPedido, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                                        .addComponent(btnGravarNovoPedido)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnCancelarNovoPedido))
+                                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                                        .addComponent(jLabel15)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(labelValorTotalNovoPedido)))
+                                .addGap(18, 18, 18)
+                                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(comboStatusNovoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel16))))
+                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel13)
+                                        .addComponent(jLabel14)
+                                        .addComponent(jLabel12)
+                                        .addComponent(comboDimensaoNovoPedido, 0, 200, Short.MAX_VALUE)
+                                        .addComponent(comboFormaPizza, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(fieldTamanhoDimensaoItemPedido))
+                                    .addComponent(comboSabor1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(comboSabor2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dialogNovoPedidoLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnGravarItemPedido)
+                                .addGap(86, 86, 86))))))
         );
         dialogNovoPedidoLayout.setVerticalGroup(
             dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelNomeClientePedido)
-                    .addComponent(labelTelefoneClientePedido)
-                    .addComponent(jLabel17)
-                    .addComponent(labelIdClientePedido))
-                .addGap(18, 18, 18)
-                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(25, 25, 25)
-                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel10)
-                    .addComponent(comboSabor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnExcluirItem)
-                            .addComponent(jLabel8)
-                            .addComponent(labelValorTotal)))
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(comboSabor2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboForma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
+                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel8)
+                                    .addComponent(labelNomeClientePedido))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jSeparator1))
+                        .addGap(1, 1, 1)))
+                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExcluirItemNovoPedido)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                        .addComponent(comboSabor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comboSabor2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboFormaPizza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboDimensaoNovoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fieldTamanhoDimensaoItemPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dialogNovoPedidoLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogNovoPedidoLayout.createSequentialGroup()
+                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(labelValorTotalNovoPedido)
+                                .addComponent(jLabel16)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(fieldMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel16)
-                            .addComponent(fieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(dialogNovoPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGravarItemPedido)
-                    .addComponent(btnGravarPedido))
-                .addContainerGap(29, Short.MAX_VALUE))
+                            .addComponent(btnGravarNovoPedido)
+                            .addComponent(btnCancelarNovoPedido)
+                            .addComponent(comboStatusNovoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnGravarItemPedido))
+                .addGap(45, 45, 45))
+        );
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -764,45 +796,15 @@ public class MainFrame extends javax.swing.JFrame {
         setIconImages(null);
 
         abaPedidos.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        abaPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                abaPedidosMouseClicked(evt);
-            }
-        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        tabelaPedidos.setModel(modeloTabelaPedidos);
+        tabelaPedidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tabelaPedidos);
 
-            },
-            new String [] {
-                "Cliente", "Data Hora", "Status"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-
-        jButton2.setText("Visualizar");
-
-        jButton3.setText("Editar");
-
-        jButton4.setText("Excluir");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnEditarPedido.setText("Editar Pedido");
+        btnEditarPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnEditarPedidoActionPerformed(evt);
             }
         });
 
@@ -813,15 +815,10 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(103, 103, 103)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
+                        .addComponent(btnEditarPedido)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -829,12 +826,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(7, 7, 7)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEditarPedido)
+                .addGap(16, 16, 16))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -852,29 +846,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         abaPedidos.addTab("Pedidos", jPanel1);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Nome", "Tipo"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jTable3.setModel(modeloTabelaSabores);
         jScrollPane3.setViewportView(jTable3);
 
         btnNovoSabor.setText("Novo Sabor");
@@ -932,15 +904,15 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Editar");
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnEditarCliente.setText("Editar");
+        btnEditarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
+                btnEditarClienteMouseClicked(evt);
             }
         });
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnEditarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btnEditarClienteActionPerformed(evt);
             }
         });
 
@@ -971,15 +943,11 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        btnNovoPedido.setText("Novo Pedido");
-        btnNovoPedido.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnNovoPedidoMouseClicked(evt);
-            }
-        });
-        btnNovoPedido.addActionListener(new java.awt.event.ActionListener() {
+        btnEfetuarPedido.setText("Efetuar Pedido");
+        btnEfetuarPedido.setPreferredSize(new java.awt.Dimension(93, 27));
+        btnEfetuarPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovoPedidoActionPerformed(evt);
+                btnEfetuarPedidoActionPerformed(evt);
             }
         });
 
@@ -990,24 +958,23 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(searchClienteField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnEfetuarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearchCliente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnClearFilterCliente))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(btnNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluirCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnNovoPedido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(0, 79, Short.MAX_VALUE)))
+                                .addComponent(btnNovoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(searchClienteField, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnEditarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                            .addComponent(btnSearchCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnClearFilterCliente)
+                            .addComponent(btnExcluirCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -1016,18 +983,18 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnExcluirCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNovoPedido))
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluirCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEfetuarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnClearFilterCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchClienteField, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(btnSearchCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(searchClienteField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearchCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         abaPedidos.addTab("Clientes", jPanel4);
@@ -1129,17 +1096,13 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void btnNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoClienteActionPerformed
       
     }//GEN-LAST:event_btnNovoClienteActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btnEditarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarClienteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnEditarClienteActionPerformed
 
     private void btnExcluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirClienteActionPerformed
         // TODO add your handling code here:
@@ -1161,6 +1124,7 @@ public class MainFrame extends javax.swing.JFrame {
                 try {
                     dao.delete(cliente);
                     modeloTabelaCliente.atualizarTabela();
+                    modeloTabelaPedidos.fireTableDataChanged();
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -1215,7 +1179,7 @@ public class MainFrame extends javax.swing.JFrame {
             mensagem += "Nome \n";
             formOk = false;
         }
-        if(fieldTelefoneCliente.getText().trim().length() == 0 || fieldTelefoneCliente.getText().trim().length() > 13){
+        if(fieldTelefoneCliente.getText().trim().length() == 0 || fieldTelefoneCliente.getText().trim().length() > 16){
             mensagem += "Telefone \n";
             formOk = false;
         }
@@ -1291,7 +1255,7 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldNumeroClienteActionPerformed
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+    private void btnEditarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarClienteMouseClicked
         // TODO add your handling code here:
         int linha = tabelaClientes.getSelectedRow();
         if(linha == -1){
@@ -1302,7 +1266,7 @@ public class MainFrame extends javax.swing.JFrame {
             exibirFormularioEditarCliente(modeloTabelaCliente.getCliente(linha));
         }
 
-    }//GEN-LAST:event_jButton6MouseClicked
+    }//GEN-LAST:event_btnEditarClienteMouseClicked
 
     private void fieldNomeClienteEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNomeClienteEditarActionPerformed
         // TODO add your handling code here:
@@ -1540,9 +1504,7 @@ public class MainFrame extends javax.swing.JFrame {
             mensagem += "Nome \n";
             formOk = false;
         }
-        
-        
-        
+ 
         if(!formOk){
             JOptionPane.showMessageDialog(dialogNovoSabor, mensagem, "Problemas encontrados",ERROR_MESSAGE);
         }
@@ -1573,7 +1535,8 @@ public class MainFrame extends javax.swing.JFrame {
                 //tenta gravar os dados no banco de dados
                 dao.insert(saborpizza);
                 modeloTabelaSabores.adicionaSabor(saborpizza);
-                getListaSabores();
+                comboSabor1.addItem(saborpizza.getNome());
+                comboSabor2.addItem(saborpizza.getNome());
             }
             catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(dialogNovoSabor,"Erro ao gravar no banco de dados. E="+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1611,11 +1574,72 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_abaPedidosMouseClicked
 
-    private void btnNovoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoPedidoActionPerformed
+    private void btnGravarItemPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarItemPedidoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnNovoPedidoActionPerformed
+         boolean formOk = true;
+        String mensagem;
+        mensagem = "Os seguintes campos estão inválidos: \n";
+        
+        //validar formulário
+        if(fieldTamanhoDimensaoItemPedido.getText().isEmpty() || !valorValido(fieldTamanhoDimensaoItemPedido.getText())){
+            mensagem += "Tamanho da Dimensão \n";
+            formOk = false;
+        }
+        
+        if(!formOk){
+            JOptionPane.showMessageDialog(dialogNovoSabor, mensagem, "Problemas encontrados",ERROR_MESSAGE);
+        }
+        else{
+            
+            //instancia a forma de acordo com o que foi escolhido
+            
+            FormaPizza forma = null;
+            switch(comboFormaPizza.getSelectedIndex()+1){
+                case 1: forma = new PizzaQuadrada();break;
+                case 2: forma = new PizzaRedonda();break;
+                default: forma = new PizzaTriangular();
+            }
+            System.out.println(comboDimensaoNovoPedido.getSelectedIndex());
+            switch(comboDimensaoNovoPedido.getSelectedIndex()+1){
+                case 1: forma.setArea(Double.parseDouble(fieldTamanhoDimensaoItemPedido.getText()));break;
+                default: forma.setMedida(Double.parseDouble(fieldTamanhoDimensaoItemPedido.getText()));
+            }
+            
+            ItemPedido itemPedido = new ItemPedido();
+            itemPedido.setMedida(forma.getMedida());
+            itemPedido.setArea(forma.getArea());
+            itemPedido.setForma(forma);
+            
+            try {
+                itemPedido.setSabor1(getSaborBySelected(comboSabor1.getSelectedIndex()));
+                itemPedido.setSabor2(getSaborBySelected(comboSabor2.getSelectedIndex()));
+                itemPedido.setValor(calculaValorItemPedido(itemPedido));
+                
+                modeloTabelaItensPedido.adicionaItem(itemPedido);
+                
+                DecimalFormat df = new DecimalFormat("####.##");
+                df.setRoundingMode(RoundingMode.UP);
+                
+                Double currentTotal = Double.parseDouble(labelValorTotalNovoPedido.getText().replace(",","."));
+                currentTotal += itemPedido.getValor();
+                System.out.println(itemPedido.getValor());
+                labelValorTotalNovoPedido.setText(df.format(currentTotal));
+            } catch (IOException | SQLException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
 
-    private void btnNovoPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNovoPedidoMouseClicked
+        }
+    }//GEN-LAST:event_btnGravarItemPedidoActionPerformed
+
+    private void btnGravarItemPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGravarItemPedidoMouseClicked
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_btnGravarItemPedidoMouseClicked
+
+    private void btnNovoPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNovoCliente1MouseClicked
+        // TODO add your handling code here:
         int linha = tabelaClientes.getSelectedRow();
         if(linha == -1){
             JOptionPane.showMessageDialog(this,"Selecione um cliente!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1624,127 +1648,196 @@ public class MainFrame extends javax.swing.JFrame {
             
             exibirFormularioPedido(modeloTabelaCliente.getCliente(linha));
         }
-        
-    }//GEN-LAST:event_btnNovoPedidoMouseClicked
+    }//GEN-LAST:event_btnNovoCliente1MouseClicked
 
-    private void btnGravarItemPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarItemPedidoActionPerformed
+    private void btnNovoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoCliente1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnGravarItemPedidoActionPerformed
+    }//GEN-LAST:event_btnNovoCliente1ActionPerformed
 
-    private void btnGravarItemPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGravarItemPedidoMouseClicked
+    private void btnEfetuarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEfetuarPedidoActionPerformed
         // TODO add your handling code here:
-        boolean formOk = true;
-        String mensagem;
-        mensagem = "Os seguintes campos estão inválidos: \n";
-        
-        //validar formulário
-        if(fieldMedida.getText().isEmpty()){
-            mensagem += "Medida \n";
-            formOk = false;
-        }
-        if(fieldArea.getText().isEmpty()){
-            mensagem += "Medida \n";
-            formOk = false;
-        }
-        
-        
-        if(!formOk){
-            JOptionPane.showMessageDialog(dialogNovoSabor, mensagem, "Problemas encontrados",ERROR_MESSAGE);
+        int linha = tabelaClientes.getSelectedRow();
+        if(linha == -1){
+            JOptionPane.showMessageDialog(this,"Selecione um cliente!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         else{
-            //instancia um novo objeto do tipo cliente
-            ItemPedido itemPedido = new ItemPedido();
-
             
-            
-            //carrega os dados do formulário para dentro do objeto cliente
-            itemPedido.setMedida(Double.parseDouble(fieldMedida.getText()));
-            itemPedido.setArea(Double.parseDouble(fieldArea.getText()));
-            itemPedido.setSabor1(comboSabor1.getSelectedItem().toString());
-            itemPedido.setSabor2(comboSabor2.getSelectedItem().toString());
-            itemPedido.setArea(Double.parseDouble(fieldArea.getText()));
-
+            exibirFormularioPedido(modeloTabelaCliente.getCliente(linha));
         }
-    }//GEN-LAST:event_btnGravarItemPedidoMouseClicked
+    }//GEN-LAST:event_btnEfetuarPedidoActionPerformed
+
+    private void comboFormaPizzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFormaPizzaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboFormaPizzaActionPerformed
+
+    private void btnExcluirItemNovoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirItemNovoPedidoActionPerformed
+        // TODO add your handling code here:
+        int linha = tableItensNovoPedido.getSelectedRow();
+        if(linha == -1){
+            JOptionPane.showMessageDialog(dialogNovoPedido,"Selecione um Item do pedido!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            DecimalFormat df = new DecimalFormat("####.##");
+            df.setRoundingMode(RoundingMode.UP);
+            ItemPedido item = modeloTabelaItensPedido.getItem(linha);
+             modeloTabelaItensPedido.removeItem(item);
+            Double currentTotal = Double.parseDouble(labelValorTotalNovoPedido.getText().replace(",","."));
+            currentTotal -= item.getValor();
+            System.out.println(item.getValor());
+            labelValorTotalNovoPedido.setText(df.format(currentTotal));
+        }
+    }//GEN-LAST:event_btnExcluirItemNovoPedidoActionPerformed
+
+    private void btnGravarNovoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarNovoPedidoActionPerformed
+        // TODO add your handling code here:
+
+        if(modeloTabelaItensPedido.getRowCount() <= 0){
+
+            JOptionPane.showMessageDialog(dialogNovoPedido,"Adicione ao menos um ítem ao pedido!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            
+            PedidoDAO dao = new PedidoDAO(); 
+            
+            if(tabelaPedidos.getSelectedRow() == -1){
+                Pedido pedido = new Pedido();
+                pedido.setCliente(modeloTabelaCliente.getCliente(tabelaClientes.getSelectedRow()));
+                pedido.setValor(Double.parseDouble(labelValorTotalNovoPedido.getText().replace(",",".")));
+                pedido.setItens(modeloTabelaItensPedido.getLista());
+                pedido.setStatus(comboStatusNovoPedido.getSelectedIndex()+1);
+
+                java.util.Date date= new java.util.Date();            
+                pedido.setDataPedido(new Timestamp(date.getTime()));
+
+                try {
+                    dao.insert(pedido);
+                    JOptionPane.showMessageDialog(dialogNovoPedido, "Pedido Registrado com sucesso!", "",INFORMATION_MESSAGE);
+                    dialogNovoPedido.dispose();
+                    labelValorTotalNovoPedido.setText("0");
+                    fieldTamanhoDimensaoItemPedido.setText("");
+                    modeloTabelaItensPedido.reset();
+                    modeloTabelaPedidos.adicionaPedido(pedido);
+
+                } catch (SQLException | IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else{
+                Pedido pedido = modeloTabelaPedidos.getPedido(tabelaPedidos.getSelectedRow());
+                pedido.setCliente(pedido.getCliente());
+                pedido.setValor(Double.parseDouble(labelValorTotalNovoPedido.getText().replace(",",".")));
+                pedido.setItens(modeloTabelaItensPedido.getLista());
+                pedido.setStatus(comboStatusNovoPedido.getSelectedIndex()+1);
+
+                java.util.Date date= new java.util.Date();            
+                pedido.setDataPedido(new Timestamp(date.getTime()));
+                
+                try {
+                    dao.update(pedido);
+                    JOptionPane.showMessageDialog(dialogNovoPedido, "Pedido Atualizado com sucesso!", "",INFORMATION_MESSAGE);
+                    dialogNovoPedido.dispose();
+                    labelValorTotalNovoPedido.setText("0");
+                    fieldTamanhoDimensaoItemPedido.setText("");
+                    modeloTabelaItensPedido.reset();
+                    modeloTabelaPedidos.fireTableDataChanged();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+            
+        }
+    }//GEN-LAST:event_btnGravarNovoPedidoActionPerformed
+
+    private void btnCancelarNovoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarNovoPedidoActionPerformed
+        // TODO add your handling code here:
+        dialogNovoPedido.dispose();
+        
+        labelValorTotalNovoPedido.setText("0");
+        fieldTamanhoDimensaoItemPedido.setText("");
+        modeloTabelaItensPedido.reset();
+    }//GEN-LAST:event_btnCancelarNovoPedidoActionPerformed
+
+    private void comboSabor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSabor1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSabor1ActionPerformed
+
+    private void comboSabor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSabor2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSabor2ActionPerformed
+
+    private void comboDimensaoNovoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDimensaoNovoPedidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboDimensaoNovoPedidoActionPerformed
+
+    private void fieldTamanhoDimensaoItemPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldTamanhoDimensaoItemPedidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldTamanhoDimensaoItemPedidoActionPerformed
+
+    private void btnEditarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPedidoActionPerformed
+        // TODO add your handling code here:
+        int linha = tabelaPedidos.getSelectedRow();
+        
+        if(linha == -1){
+            JOptionPane.showMessageDialog(this,"Selecione um pedido!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            Pedido pedido = modeloTabelaPedidos.getPedido(linha);
+            
+            try {
+                populaFormularioPedido(pedido);
+                dialogNovoPedido.setVisible(true);
+                dialogNovoPedido.toFront();
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+    }//GEN-LAST:event_btnEditarPedidoActionPerformed
     
     public Boolean valorValido(String valor){
         try{
            Double d = Double.parseDouble(valor.replace(",", "."));
-           return true && d>0;
-          
+           return true && d>0;      
         }
         catch(NumberFormatException e){
             return false;
         }
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new MainFrame().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane abaPedidos;
     private javax.swing.JButton btnCancelarEditarCliente;
     private javax.swing.JButton btnCancelarNovoCliente;
+    private javax.swing.JButton btnCancelarNovoPedido;
     private javax.swing.JButton btnClearFilterCliente;
+    private javax.swing.JButton btnEditarCliente;
+    private javax.swing.JButton btnEditarPedido;
+    private javax.swing.JButton btnEfetuarPedido;
     private javax.swing.JButton btnExcluirCliente;
-    private javax.swing.JButton btnExcluirItem;
+    private javax.swing.JButton btnExcluirItemNovoPedido;
     private javax.swing.JButton btnGravarEditarCliente;
     private javax.swing.JButton btnGravarItemPedido;
     private javax.swing.JButton btnGravarNovoCliente;
-    private javax.swing.JButton btnGravarPedido;
+    private javax.swing.JButton btnGravarNovoPedido;
     private javax.swing.JButton btnGravarSabor;
     private javax.swing.JButton btnGravarValores;
     private javax.swing.JButton btnNovoCliente;
-    private javax.swing.JButton btnNovoPedido;
     private javax.swing.JButton btnNovoSabor;
     private javax.swing.JButton btnSearchCliente;
-    private javax.swing.JComboBox comboForma;
+    private javax.swing.JComboBox comboDimensaoNovoPedido;
+    private javax.swing.JComboBox comboFormaPizza;
     private javax.swing.JComboBox comboSabor1;
     private javax.swing.JComboBox comboSabor2;
+    private javax.swing.JComboBox comboStatusNovoPedido;
     private javax.swing.JDialog dialogEditarCliente;
     private javax.swing.JDialog dialogNovoCliente;
     private javax.swing.JDialog dialogNovoPedido;
     private javax.swing.JDialog dialogNovoSabor;
-    private javax.swing.JDialog dialogValores;
-    private javax.swing.JTextField fieldArea;
     private javax.swing.JTextField fieldBairroCliente;
     private javax.swing.JTextField fieldBairroClienteEditar;
     private javax.swing.JTextField fieldCidadeCliente;
@@ -1752,7 +1845,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField fieldComplementoCliente;
     private javax.swing.JTextField fieldComplementoClienteEditar;
     private javax.swing.JTextArea fieldIngredientesSabor;
-    private javax.swing.JTextField fieldMedida;
     private javax.swing.JTextField fieldNomeCliente;
     private javax.swing.JTextField fieldNomeClienteEditar;
     private javax.swing.JTextField fieldNomeSabor;
@@ -1760,15 +1852,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField fieldNumeroClienteEditar;
     private javax.swing.JTextField fieldRuaCliente;
     private javax.swing.JTextField fieldRuaClienteEditar;
+    private javax.swing.JTextField fieldTamanhoDimensaoItemPedido;
     private javax.swing.JTextField fieldTelefoneCliente;
     private javax.swing.JTextField fieldTelefoneClienteEditar;
     private javax.swing.JComboBox fieldTipoSabor;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1777,7 +1866,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1797,8 +1885,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable3;
     private javax.swing.JLabel labelBairroCliente;
     private javax.swing.JLabel labelBairroCliente1;
@@ -1806,7 +1893,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel labelCidadeCliente1;
     private javax.swing.JLabel labelComplementoCliente;
     private javax.swing.JLabel labelComplementoCliente1;
-    private javax.swing.JLabel labelIdClientePedido;
     private javax.swing.JLabel labelNomeCliente;
     private javax.swing.JLabel labelNomeCliente1;
     private javax.swing.JLabel labelNomeClientePedido;
@@ -1816,10 +1902,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel labelRuaCliente1;
     private javax.swing.JLabel labelTelefoneCliente;
     private javax.swing.JLabel labelTelefoneCliente1;
-    private javax.swing.JLabel labelTelefoneClientePedido;
-    private javax.swing.JLabel labelValorTotal;
+    private javax.swing.JLabel labelValorTotalNovoPedido;
     private javax.swing.JTextField searchClienteField;
     private javax.swing.JTable tabelaClientes;
+    private javax.swing.JTable tabelaPedidos;
+    private javax.swing.JTable tableItensNovoPedido;
     private javax.swing.JTextField valorPizzaEspecial;
     private javax.swing.JTextField valorPizzaPremium;
     private javax.swing.JTextField valorPizzaSimples;
@@ -1839,9 +1926,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     public void exibirFormularioPedido(Cliente cliente){
-        labelNomeClientePedido.setText(cliente.getNome());
-        labelTelefoneClientePedido.setText(cliente.getTelefone());
-        labelIdClientePedido.setText("cliente.getId()");
+        labelNomeClientePedido.setText(cliente.getNome() + " - " + cliente.getTelefone());
         dialogNovoPedido.setVisible(true);
         dialogNovoPedido.toFront();
         
@@ -1860,6 +1945,42 @@ public class MainFrame extends javax.swing.JFrame {
             i++;
         }
         return lista;
+    }
+    
+    public SaborPizza getSaborBySelected(int sel) throws IOException{
+        SaborPizzaDAO dao = new SaborPizzaDAO();
+        List<SaborPizza> sabores = dao.findAllSabores();
+        return sabores.get(sel);
+    }
+    
+    //calcula o valor do item do pedido de acordo com os sabores escolhidos
+    public Double calculaValorItemPedido(ItemPedido item) throws SQLException, IOException{
+        TipoPizzaDAO dao = new TipoPizzaDAO();
+        
+        
+        if(item.getSabor1().getTipo() == item.getSabor2().getTipo()){
+            
+            Double valor = dao.findValorByTipo(item.getSabor1().getTipo());
+            
+            return valor * item.getArea();
+        }
+        else{
+            Double valor1 = dao.findValorByTipo(item.getSabor1().getTipo());
+            Double valor2 = dao.findValorByTipo(item.getSabor2().getTipo());
+            
+            return ((valor1+valor2)/2)*item.getArea();
+        }
+    }
+    
+    public void populaFormularioPedido(Pedido pedido) throws IOException{
+        PedidoDAO dao = new PedidoDAO();
+        
+        modeloTabelaItensPedido.setLista(dao.findItensByIdPedido(pedido.getId()));
+        labelValorTotalNovoPedido.setText(String.valueOf(pedido.getValor()));
+        comboStatusNovoPedido.setSelectedIndex(pedido.getStatus()-1);
+        labelNomeClientePedido.setText(pedido.getCliente().getNome()+" "+pedido.getCliente().getTelefone());
+        
+        
     }
 }
 

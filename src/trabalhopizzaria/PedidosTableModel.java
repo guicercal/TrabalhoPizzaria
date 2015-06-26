@@ -6,7 +6,10 @@
 package trabalhopizzaria;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -14,25 +17,25 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Guilherme
  */
-public class SaboresTableModel extends AbstractTableModel {
+public class PedidosTableModel extends AbstractTableModel {
 
-    private String[] colunas = new String[]{"Nome","Tipo"};
-    private List<SaborPizza> lista = new ArrayList();
+    private String[] colunas = new String[]{"Status","Cliente","Data - Hora","Valor"};
+    private List<Pedido> lista = new ArrayList();
 
-    public List<SaborPizza> getLista() {
+    public List<Pedido> getLista() {
         return lista;
     }
 
-    public void setLista(List<SaborPizza> lista) {
+    public void setLista(List<Pedido> lista) {
         this.lista = lista;
         this.fireTableDataChanged();
     }
 
-    public SaboresTableModel() throws IOException {
-        SaborPizzaDAO dao = new SaborPizzaDAO();
-        this.lista = dao.findAllSabores();
+    public PedidosTableModel() throws IOException {
+        PedidoDAO dao = new PedidoDAO();
+        this.lista = dao.findAllPedidos();
         this.fireTableDataChanged();
-    } 
+    }
      
 
     @Override
@@ -57,50 +60,57 @@ public class SaboresTableModel extends AbstractTableModel {
     
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        SaborPizza sabor = lista.get(rowIndex);
+        Pedido pedido = lista.get(rowIndex);
         switch (columnIndex) {
-            case 0: return sabor.getNome();
-            case 1: return sabor.getNomeTipo();
-
+            case 0: return pedido.getNomeStatus();
+            case 1: return pedido.getCliente().getNome();
+            case 2: return new SimpleDateFormat( "dd/MM/YYYY - HH:mm:ss" ).format(pedido.getDataPedido().getTime());
+            case 3: return pedido.getValor();
             default : return null;
         }
     }
     
     @Override
     public void setValueAt(Object value, int row, int col) {
-        SaborPizza sabor = lista.get(row);
+        Pedido pedido = lista.get(row);
         switch (col) {
             case 0:
-                sabor.setNome((String) value);
+                pedido.setStatus((int) value); //if column 0 (code)
                 break;
             case 1:
-                sabor.setTipo((int) value);
+                pedido.setCliente((Cliente) value);
+                break;
+            case 2:
+                pedido.setDataPedido((Timestamp) value);
+                break;
+            case 3:
+                pedido.setValor((Double) value);
                 break;
             default:
         }
         this.fireTableCellUpdated(row, col);
     }
     
-    public boolean removeSabor(SaborPizza sabor) {
-        int linha = this.lista.indexOf(sabor);
-        boolean result = this.lista.remove(sabor);
+    public boolean removePedido(Pedido pedido) {
+        int linha = this.lista.indexOf(pedido);
+        boolean result = this.lista.remove(pedido);
         this.fireTableRowsDeleted(linha,linha);//update JTable
         return result;
     }
     
     public void atualizarTabela() throws IOException{
-        SaborPizzaDAO dao = new SaborPizzaDAO();
-        this.lista = dao.findAllSabores();
+       PedidoDAO dao = new PedidoDAO();
+        this.lista = dao.findAllPedidos();
         this.fireTableDataChanged();
     }
     
-    public void adicionaSabor(SaborPizza sabor) {
-        this.lista.add(sabor);
+    public void adicionaPedido(Pedido pedido) {
+        this.lista.add(pedido);
         //this.fireTableDataChanged();
         this.fireTableRowsInserted(lista.size()-1,lista.size()-1);//update JTable
     }
     
-    public SaborPizza getSabor(int offset){
+    public Pedido getPedido(int offset){
         return lista.get(offset);
     }
     

@@ -20,7 +20,7 @@ public class TrabalhoPizzaria {
     /**
      * @param args the command line arguments
      */
-     public static void main(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -44,7 +44,7 @@ public class TrabalhoPizzaria {
         }
         //</editor-fold>
         //</editor-fold>
-
+            
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -52,7 +52,7 @@ public class TrabalhoPizzaria {
                 try {
                     new MainFrame().setVisible(true);
                 } catch (IOException ex) {
-                    Logger.getLogger(TrabalhoPizzaria.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

@@ -21,7 +21,7 @@ public class SaborPizza {
     public String getNome() {
         return nome;
     }
-
+ 
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -47,8 +47,7 @@ public class SaborPizza {
         switch(this.tipo){
             case 1: return "Simples"; 
             case 2: return "Especial";
-            case 3: return "Premium";
-            default: return "Simples";
+            default: return "Premium";
         }
     }
 
